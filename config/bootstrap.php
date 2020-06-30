@@ -7,6 +7,7 @@ use DI\Container;
 use Config\DbConfiguration;
 use Respect\Validation\Factory;
 
+// Set Custom Validators
 Factory::setDefaultInstance(
     (new Factory())
         ->withRuleNamespace('App\\Validation\\Rules')

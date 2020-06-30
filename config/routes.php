@@ -10,12 +10,12 @@ use App\Middleware\Authorization;
 
 return function ($app) {
 
-    $app->group('/users', function (RouteCollectorProxy $group) {
+    $app->post('[/]', UserController::class . ':postSignUp');
+    $app->post('/login', UserController::class . ':postSignIn');
 
-        $group->get('[/]', UserController::class . ':getAll');
-        $group->post('/signup', UserController::class . ':postSignUp');
-        $group->post('/signin', UserController::class . ':postSignIn');
-    });
+    $app->post('/materias', UserController::class . ':postMateria')->add(Authorization::class . ":adminAthorization");
+
+
 
     $app->group('/pets', function (RouteCollectorProxy $group) {
 

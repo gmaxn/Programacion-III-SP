@@ -8,6 +8,6 @@ class RoleAvailable extends AbstractRule
 {
     public function validate($input) : bool
     {
-        return Role::where('name', strtolower($input))->count() > 0;
+        return Role::where('tipo', strtolower($input))->count() > 0;
     }
 }

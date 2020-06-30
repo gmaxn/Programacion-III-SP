@@ -2,8 +2,8 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 
-class Role extends EloquentModel 
+class Materia extends EloquentModel 
 {
-    protected $table = 'tipos';
+    protected $table = 'materias';
     public $timestamps = false;
 }

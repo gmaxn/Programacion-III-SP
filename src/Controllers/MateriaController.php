@@ -6,13 +6,17 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Models\Users;
 use App\Models\Role;
+use App\Models\Appointment;
+
 
 use Respect\Validation\Validator as v;
 use App\Validation\ValidatorInterface;
 use App\Services\Auth\AuthInterface;
+use Firebase\JWT\JWT;
 
 
-class UserController 
+
+class MateriaController 
 {
     protected $validator;
     protected $auth;
@@ -25,25 +29,27 @@ class UserController
 
     public function getAll(Request $request, Response $response, $args) {
 
-        $result = json_encode(Users::all());
+        $token = $request->getHeaders()['Authorization'];
+        $user = JWT::decode($token[0], $_ENV['ACCESS_TOKEN_SECRET'], array('HS256'));
+
+        $result = json_encode(Appointment::where('id', '=', $user->id));
 
         $response->getBody()->write($result);
 
         return $response;
     }
 
-    public function postSignUp(Request $request, Response $response, $args) {
+    public function postMateria(Request $request, Response $response, $args) {
+        
 
         // validate fields
         $validation = $this->validator->validate($request, [
-            'email' => v::email()->emailAvailable(),
-            'clave' => v::noWhitespace()->notEmpty(),
-            'tipo' => v::roleAvailable(),
-            'nombre'  => v::noWhitespace()->notEmpty(),
-            'legajo' => v::intVal()->between(1000, 2000)->LegajoDisponible()
+            'materia' => v::vetExists(),
+            'cuatrimestre' => v::timeAvailable(),
+            'vacantes' => v::timeAvailable(),
+            'profesor' => v::timeAvailable(),
+
         ]);
-
-
 
         if($validation->failed())
         {
@@ -51,20 +57,19 @@ class UserController
             return $response;
         }
 
-        $user = new Users();
-        $user->email = $request->getParsedBody()['email'];
-        $user->clave = password_hash($request->getParsedBody()['clave'], PASSWORD_DEFAULT);
-        $user->nombre = $request->getParsedBody()['nombre'];
-        $user->legajo = $request->getParsedBody()['legajo'];
+        $Appointment = new Appointment();
+        $token = $request->getHeaders()['Authorization'];
+        $user = JWT::decode($token[0], $_ENV['ACCESS_TOKEN_SECRET'], array('HS256'));
 
-        $role = Role::where('tipo', '=', $request->getParsedBody()['tipo'])->firstOrFail();
-        $user->tipo_id = $role->id;
-        $user->save();
+        $Appointment->time = $request->getParsedBody()['time'];
+        $Appointment->clientId = $user->userId;
+        $Appointment->vetId = $request->getParsedBody()['vetId'];
+        $Appointment->save();
 
         $response->getBody()
                  ->write(json_encode([
                             "suceed" => true,
-                            "data" => $user
+                            "data" => $Appointment
                         ]));
 
         return $response;
@@ -75,7 +80,7 @@ class UserController
         // validate fields
         $validation = $this->validator->validate($request, [
             'email' => v::email(),
-            'clave' => v::noWhitespace()->notEmpty()
+            'password' => v::noWhitespace()->notEmpty()
         ]);
             
         if($validation->failed())
@@ -87,7 +92,7 @@ class UserController
         
         // generate token
         $email = $request->getParsedBody()['email'];
-        $password = $request->getParsedBody()['clave'];
+        $password = $request->getParsedBody()['password'];
 
         $result = $this->auth->authenticate($email, $password);
 

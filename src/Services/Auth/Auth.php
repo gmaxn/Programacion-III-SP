@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Services\Auth;
-use App\Models\User;
+use App\Models\Users;
 use Exception;
 use stdClass;
 use Firebase\JWT\JWT;
@@ -14,14 +14,14 @@ class Auth implements AuthInterface
         $result = new stdClass();
         $result->succeed = false;
 
-        $user = User::where('email', "=", $email)->first();
+        $user = Users::where('email', "=", $email)->first();
 
         if(!isset($user))
         {
 
             $result->content = "user does not exist";
         }
-        else if (!password_verify($password, $user->password))
+        else if (!password_verify($password, $user->clave))
         {
 
             $result->content = "user and password does not match";
@@ -32,10 +32,12 @@ class Auth implements AuthInterface
             $result->content = 
                 $this->generateToken(
                     $user->id,
+                    $user->nombre,
                     $user->email,
-                    $user->role,
+                    $user->legajo,
+                    $user->tipo_id,
                     strtotime('now'),
-                    strtotime('now') + 60
+                    strtotime('now') + 120
                 );
 
         }
