@@ -22,7 +22,7 @@ return function ($app) {
     $app->group('/materias', function (RouteCollectorProxy $group) {
 
         $group->post('[/]', MateriaController::class . ':postMateria')->add(Authorization::class . ":adminAthorization");
-        $group->get('/{id}', PetController::class . ':getAll');
+        $group->get('/{id}', MateriaController::class . ':getAll');
 
     });
 
