@@ -22,10 +22,8 @@ return function ($app) {
     $app->group('/materias', function (RouteCollectorProxy $group) {
 
         $group->post('[/]', MateriaController::class . ':postMateria')->add(Authorization::class . ":adminAthorization");
-
-
-        $group->get('[/]', PetController::class . ':getAll')->add(Authorization::class . ":userAthorization");
-        $group->post('/add', PetController::class . ':postPet')->add(Authorization::class . ":clientAthorization");
+        $group->get('/{id}', PetController::class . ':getAll');
+        $group->get('/add', PetController::class . ':postPet')->add(Authorization::class . ":clientAthorization");
 
     });
 

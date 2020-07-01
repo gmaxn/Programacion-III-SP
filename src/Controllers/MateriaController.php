@@ -63,5 +63,36 @@ class MateriaController
         return $response;
     }
 
+    public function getAll(Request $request, Response $response, $args) {
+
+        $token = $request->getHeaders()['Authorization'];
+        $user = JWT::decode($token[0], $_ENV['ACCESS_TOKEN_SECRET'], array('HS256'));
+
+        $role = Role::where('id', '=', $user->roleId)->firstOrfail();
+
+        if($role->tipo = 'alumno')
+        {
+
+            $result = json_encode(Materias::where(''));
+
+            $response->getBody()->write($result);
+    
+            return $response;
+
+        }
+
+        
+        if($role->tipo = 'profesor')
+        {
+            $result = json_encode(Materias::where('profesor_id', '=', $user->id));
+
+            $response->getBody()->write($result);
+    
+            return $response;
+            
+        }
+
+
+    }
 
 }
