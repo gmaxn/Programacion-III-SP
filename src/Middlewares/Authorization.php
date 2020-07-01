@@ -50,9 +50,9 @@ class Authorization
         $result = $this->auth->authorize($token);
 
         
-        $role = Role::where('id', '=', $result->data->userContext->roleId);
+        $role = Role::where('id', '=', $result->data->userContext->roleId)->firstOrFail();
 
-        if(!$result->status || $role != "admin")
+        if($role->tipo != "admin")
         {
 
             $response = new Response();

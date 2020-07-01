@@ -4,6 +4,8 @@ use Slim\Routing\RouteCollectorProxy;
 use App\Controllers\UserController;
 use App\Controllers\PetController;
 use App\Controllers\AppointmentController;
+use App\Controllers\MateriaController;
+
 
 
 use App\Middleware\Authorization;
@@ -13,7 +15,7 @@ return function ($app) {
     $app->post('/usuario', UserController::class . ':postSignUp');
     $app->post('/login', UserController::class . ':postSignIn');
 
-    $app->post('/materias', UserController::class . ':postMateria')->add(Authorization::class . ":adminAthorization");
+    $app->post('/materias', MateriaController::class . ':postMateria')->add(Authorization::class . ":adminAthorization");
 
 
 

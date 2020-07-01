@@ -30,7 +30,7 @@ class MateriaController
 
     public function postMateria(Request $request, Response $response, $args) {
         
-
+/*
         // validate fields
         $validation = $this->validator->validate($request, [
             'materia' => v::vetExists(),
@@ -38,7 +38,7 @@ class MateriaController
             'vacantes' => v::timeAvailable(),
             'profesor' => v::timeAvailable(),
 
-        ]);
+        ]);*/
 
         if($validation->failed())
         {
