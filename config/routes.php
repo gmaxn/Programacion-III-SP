@@ -23,7 +23,6 @@ return function ($app) {
 
         $group->post('[/]', MateriaController::class . ':postMateria')->add(Authorization::class . ":adminAthorization");
         $group->get('/{id}', PetController::class . ':getAll');
-        $group->get('/add', PetController::class . ':postPet')->add(Authorization::class . ":clientAthorization");
 
     });
 
