@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Models\Users;
 use App\Models\Role;
-use App\Models\Appointment;
+use App\Models\Materias;
 
 
 use Respect\Validation\Validator as v;
@@ -38,27 +38,26 @@ class MateriaController
             'vacantes' => v::timeAvailable(),
             'profesor' => v::timeAvailable(),
 
-        ]);*/
+        ]);
 
         if($validation->failed())
         {
             $response->getBody()->write($validation->getValidationErrors());
             return $response;
-        }
+        }*/
 
-        $Appointment = new Appointment();
-        $token = $request->getHeaders()['Authorization'];
-        $user = JWT::decode($token[0], $_ENV['ACCESS_TOKEN_SECRET'], array('HS256'));
+        $materia = new Materias();
+        $materia->materia = $request->getParsedBody()['materia'];
+        $materia->cuatrimestre = $request->getParsedBody()['cuatrimestre'];
+        $materia->vacantes = $request->getParsedBody()['vacantes'];
+        $materia->profesor_id = $request->getParsedBody()['profesor'];
 
-        $Appointment->time = $request->getParsedBody()['time'];
-        $Appointment->clientId = $user->userId;
-        $Appointment->vetId = $request->getParsedBody()['vetId'];
-        $Appointment->save();
+        $materia->save();
 
         $response->getBody()
                  ->write(json_encode([
                             "suceed" => true,
-                            "data" => $Appointment
+                            "data" => $materia
                         ]));
 
         return $response;
