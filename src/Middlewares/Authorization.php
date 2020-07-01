@@ -49,11 +49,10 @@ class Authorization
         
         $result = $this->auth->authorize($token);
 
-        var_dump($result);die;
         
-        Role::where('id', '=', $result->data->userContext->tipo_id);
+        $role = Role::where('id', '=', $result->data->userContext->roleId);
 
-        if(!$result->status || $result->data->userContext->tipo_id != 1)
+        if(!$result->status || $role != "admin")
         {
 
             $response = new Response();

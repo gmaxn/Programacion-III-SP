@@ -10,7 +10,7 @@ use App\Middleware\Authorization;
 
 return function ($app) {
 
-    $app->post('[/]', UserController::class . ':postSignUp');
+    $app->post('/usuario', UserController::class . ':postSignUp');
     $app->post('/login', UserController::class . ':postSignIn');
 
     $app->post('/materias', UserController::class . ':postMateria')->add(Authorization::class . ":adminAthorization");

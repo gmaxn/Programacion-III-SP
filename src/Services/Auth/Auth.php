@@ -41,18 +41,21 @@ class Auth implements AuthInterface
                 );
 
         }
+
         return $result;
     }
 
-    public function generateToken($userId, $email, $role, $iat, $exp)
+    public function generateToken($userId, $nombre, $email, $legajo, $role, $iat, $exp)
     {
 
         $payload = array(
             "iat" => $iat,
             "exp" => $exp,
             "userId" => $userId,
+            "nombre" => $userId,
             "email" => $email,
-            "role" => $role
+            "legajo" => $userId,
+            "roleId" => $role
         );
 
         return JWT::encode($payload, $_ENV['ACCESS_TOKEN_SECRET']);
