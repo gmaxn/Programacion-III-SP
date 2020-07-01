@@ -15,11 +15,13 @@ return function ($app) {
     $app->post('/usuario', UserController::class . ':postSignUp');
     $app->post('/login', UserController::class . ':postSignIn');
 
-    $app->post('/materias', MateriaController::class . ':postMateria')->add(Authorization::class . ":adminAthorization");
+    
 
 
 
-    $app->group('/pets', function (RouteCollectorProxy $group) {
+    $app->group('/materias', function (RouteCollectorProxy $group) {
+
+        $group->post('[/]', MateriaController::class . ':postMateria')->add(Authorization::class . ":adminAthorization");
 
 
         $group->get('[/]', PetController::class . ':getAll')->add(Authorization::class . ":userAthorization");
